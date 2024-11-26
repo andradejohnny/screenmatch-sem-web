@@ -1,9 +1,7 @@
 package br.com.alura.screenmatch;
 
-import br.com.alura.screenmatch.model.DadosEpisodio;
-import br.com.alura.screenmatch.model.DadosSerie;
-import br.com.alura.screenmatch.service.ConsumoApi;
-import br.com.alura.screenmatch.service.ConverteDados;
+
+import br.com.alura.screenmatch.principal.Principal;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,24 +22,7 @@ public class ScreenmatchApplication implements CommandLineRunner {
 	// uma interface gráfica
 	@Override
 	public void run(String... args) throws Exception {
-		ConsumoApi consumoApi = new ConsumoApi();
-		//Consome os dados da API e obtem os dados da série e atribiu na var json
-		var json = consumoApi.obterDados("https://www.omdbapi.com/?t=gilmore+girls&apikey=ece053e5");
-		// imprime a var json
-		System.out.println(json);
-		json = consumoApi.obterDados("https://coffee.alexflipnote.dev/random.json");
-		System.out.println(json);
-
-		//instancia o conversor
-		ConverteDados conversor = new ConverteDados();
-		//Transforma para dados série
-		DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
-		System.out.println(dados);
-
-		json = consumoApi.obterDados("https://www.omdbapi.com/?t=gilmore+girls&Season=1&episode=2&apikey=6585022c");
-
-		DadosEpisodio dadosEpisodio = conversor.obterDados(json, DadosEpisodio.class);
-		System.out.println(dadosEpisodio);
-
+		Principal principal = new Principal();
+		principal.exibeMenu();
 	}
 }
