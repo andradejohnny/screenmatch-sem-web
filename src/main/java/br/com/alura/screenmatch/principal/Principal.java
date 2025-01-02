@@ -3,14 +3,11 @@ package br.com.alura.screenmatch.principal;
 import br.com.alura.screenmatch.model.DadosSerie;
 import br.com.alura.screenmatch.model.DadosTemporada;
 import br.com.alura.screenmatch.model.Episodio;
+import br.com.alura.screenmatch.model.Serie;
 import br.com.alura.screenmatch.service.ConsumoApi;
 import br.com.alura.screenmatch.service.ConverteDados;
 
-import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Principal {
@@ -29,7 +26,7 @@ public class Principal {
             var menu = """
                     1 - Buscar séries
                     2 - Buscar episódios
-                    3 - Listar séries buuscadas
+                    3 - Listar séries buscadas
                     
                     0 - Sair                                 
                     """;
@@ -83,8 +80,23 @@ public class Principal {
         temporadas.forEach(System.out::println);
     }
 
+    //novo método, listarSeriesBuscadas(), que itera sobre a lista e imprime os dados de cada série
     private void listarSeriesBuscadas()
     {
-        dadosSeries.forEach(System.out::println);
+        //Declara um List das series
+        List<Serie> series = new ArrayList<>();
+        //Pegas dos dados de dadosSeries e atribui a series com tratativas
+        series = dadosSeries.stream()
+                //para cada d (dadosSerie) eu vou criar uma serie
+                        .map(d -> new Serie(d))
+                //coleta para uma lista
+                                .collect(Collectors.toList());
+
+        //imprimir lista ordenando pelo genero
+        series.stream()
+                //ordena comparando
+                .sorted(Comparator.comparing(Serie::getGenero))
+                //imprime um por um
+                .forEach(System.out::println);
     }
 }
