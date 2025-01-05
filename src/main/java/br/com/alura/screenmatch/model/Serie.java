@@ -2,25 +2,41 @@ package br.com.alura.screenmatch.model;
 
 import br.com.alura.screenmatch.service.ConsultaChatGPT;
 import com.fasterxml.jackson.annotation.JsonAlias;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.OptionalDouble;
 
 // Nova classe Serie para representar os dados de uma série, pois a classe DadosSerie não atendia a todas as necessidades,
 // responsável por receber os dados brutos da API OMDB e transformá-los em um objeto com as informações tratadas e formatadas conforme a necessidade da aplicação.
 
 
+//Com o @Entity eu vou dizer que essa classe vai ser uma tabela do banco
+@Entity
+@Table(name = "series")
 public class Serie {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true) //titulo não poderá se repetir
     private String titulo;
     private Integer totalTemporadas;
     //avaliacao foi alterado de String para Double.
     private Double avaliacao;
     //genero foi alterado de String para um enum Categoria.
+    @Enumerated(EnumType.STRING)
     private Categoria genero;
     private String atores;
     private String poster;
     private String sinopse;
 
+    //Lista de episódios por série
+    @Transient
+    private List<Episodio> episodios = new ArrayList<>();
 
+    public Serie(){}
 
     public Serie(DadosSerie dadosSerie)
     {
@@ -34,9 +50,25 @@ public class Serie {
         this.poster = dadosSerie.poster();
         // utiliza a API do ChatGPT para traduzir a sinopse
         // utiliza o metodo trim para não ter nenhum caracter em branco ou quebra de linha
-        this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse()).trim();
+        //this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse()).trim();
+        this.sinopse = dadosSerie.sinopse();
     }
 
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        this.episodios = episodios;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTitulo() {
         return titulo;
