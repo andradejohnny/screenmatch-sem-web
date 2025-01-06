@@ -32,8 +32,10 @@ public class Serie {
     private String poster;
     private String sinopse;
 
-    //Lista de episódios por série
-    @Transient
+    //Lista de episódios por série -> a visão da série é um pra muitos
+    //pois uma série tem muitos episódios
+    //mapea com o nome do atributo que está na outra classe
+    @OneToMany(mappedBy = "serie")
     private List<Episodio> episodios = new ArrayList<>();
 
     public Serie(){}
