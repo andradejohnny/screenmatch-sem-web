@@ -35,7 +35,8 @@ public class Serie {
     //Lista de episódios por série -> a visão da série é um pra muitos
     //pois uma série tem muitos episódios
     //mapea com o nome do atributo que está na outra classe
-    @OneToMany(mappedBy = "serie")
+    // O atributo cascade no mapeamento define como as operações de persistência (salvar, atualizar, deletar) em uma entidade afetam as entidades relacionadas
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
     private List<Episodio> episodios = new ArrayList<>();
 
     public Serie(){}
