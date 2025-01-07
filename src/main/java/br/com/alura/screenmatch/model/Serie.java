@@ -36,7 +36,8 @@ public class Serie {
     //pois uma série tem muitos episódios
     //mapea com o nome do atributo que está na outra classe
     // O atributo cascade no mapeamento define como as operações de persistência (salvar, atualizar, deletar) em uma entidade afetam as entidades relacionadas
-    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
+    // FetchType.EAGER: Carrega os episódios junto com a série, evitando LazyInitializationException.  Considere FetchType.LAZY para melhor performance em casos com muitos episódios.
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Episodio> episodios = new ArrayList<>();
 
     public Serie(){}
@@ -62,6 +63,7 @@ public class Serie {
     }
 
     public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(e -> e.setSerie(this));
         this.episodios = episodios;
     }
 
@@ -138,6 +140,7 @@ public class Serie {
                 ", avaliacao=" + avaliacao +
                 ", atores='" + atores + '\'' +
                 ", poster='" + poster + '\'' +
-                ", sinopse='" + sinopse + '\'';
+                ", sinopse='" + sinopse + '\'' +
+                ", episodios='" + episodios + '\'';
     }
 }
